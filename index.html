@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>九合一投資分析器 - Terry's Hub</title>
+  <title>Gem 視覺工程師 - Terry's Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
@@ -30,162 +30,88 @@
     <div class="flex items-center gap-2">
       <button onclick="goHome()" class="text-2xl" aria-label="回到頁面頂端">✕</button>
       <div>
-        <p class="text-sm font-medium">九合一投資分析器 · Terry's Hub</p>
+        <p class="text-sm font-medium">Gem 視覺工程師 · Terry's Hub</p>
         <p class="text-xs text-gray-500">terry20250224.github.io</p>
       </div>
     </div>
   </header>
 
-  <div class="max-w-2xl mx-auto px-4 pt-6">
+  <main class="max-w-2xl mx-auto px-4 pt-8">
     <div class="flex items-center gap-3 mb-6">
-      <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 via-amber-400 to-rose-400 rounded-xl flex items-center justify-center text-white text-2xl font-bold">
-        📊
-      </div>
-      <h1 class="text-3xl font-bold text-gray-900">九合一投資分析器</h1>
-    </div>
-
-    <p class="text-gray-600 mb-8 leading-relaxed">
-      輸入資產代號，一鍵複製專業分析 Prompt，貼到 Gemini 即可生成九維度結構化報告。
-    </p>
-
-    <div class="card p-6 mb-8">
-      <label class="block text-sm font-medium text-gray-700 mb-2" for="assetInput">
-        資產代號（股票代號 / 加密貨幣符號）
-      </label>
-      <input type="text" id="assetInput" placeholder="例如：2330.TW / AAPL / BTC-USD"
-        class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-amber-500 text-lg">
-
-      <div class="flex gap-3 mt-6">
-        <button onclick="generateInvestmentPrompt()"
-          class="flex-1 bg-amber-800 hover:bg-amber-900 text-white font-medium py-3.5 rounded-2xl transition-colors">
-          生成 Prompt
-        </button>
-        <button onclick="copyInvestmentPrompt()"
-          class="flex-1 border border-amber-800 text-amber-800 hover:bg-amber-50 font-medium py-3.5 rounded-2xl transition-colors">
-          複製到剪貼簿
-        </button>
+      <div class="w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-rose-500 rounded-2xl flex items-center justify-center text-white text-3xl">🎨</div>
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Gem 視覺工程師</h1>
+        <p class="text-gray-600">Midjourney / Flux / Grok Imagine 專業提示詞生成器</p>
       </div>
     </div>
 
-    <div class="card p-6 mb-8">
-      <div class="flex items-center gap-3 mb-4">
-        <div class="text-2xl">🎨</div>
-        <h2 class="text-xl font-bold text-gray-800">Gemini 視覺工程師</h2>
+    <section class="card p-6 mb-8">
+      <p class="text-sm text-gray-600 mb-4">輸入任何描述，我會幫你轉化成高品質視覺提示詞</p>
+      <textarea id="inputText" rows="5" class="w-full p-5 border border-gray-200 rounded-2xl focus:outline-none focus:border-purple-500 resize-y text-base" placeholder="例如：一個穿著漢服的女孩在雨中撐傘走在古巷..."></textarea>
+      <button onclick="generatePrompt()" class="w-full mt-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-4 rounded-2xl text-lg transition-all">生成專業 Prompt</button>
+    </section>
+
+    <section class="card p-6">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="font-semibold text-gray-800">生成的 Prompt</h2>
+        <button onclick="copyPrompt()" class="text-purple-600 hover:text-purple-700 flex items-center gap-1 text-sm"><i class="fas fa-copy"></i> 複製</button>
       </div>
-      <p class="text-sm text-gray-600 mb-4">輸入描述，我幫你轉成高品質 Midjourney / Flux / Grok Imagine Prompt</p>
+      <textarea id="outputPrompt" rows="10" class="w-full p-5 border border-gray-200 rounded-2xl font-mono text-sm leading-relaxed" readonly></textarea>
+    </section>
+  </main>
 
-      <textarea id="visualInput" rows="4"
-        class="w-full p-4 border border-gray-200 rounded-2xl focus:outline-none focus:border-amber-500 resize-y"
-        placeholder="在此輸入你想生成的畫面描述..."></textarea>
-
-      <button onclick="generateVisualPrompt()"
-        class="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium py-3.5 rounded-2xl hover:brightness-105 transition">
-        生成視覺 Prompt
-      </button>
-
-      <div class="mt-6">
-        <h3 class="font-medium text-gray-700 mb-2 flex justify-between">
-          生成的 Prompt
-          <button onclick="copyVisualPrompt()" class="text-amber-700 hover:text-amber-800 text-sm font-normal">📋 複製</button>
-        </h3>
-        <textarea id="visualOutput" rows="8"
-          class="w-full p-4 border border-gray-200 rounded-2xl font-mono text-sm"></textarea>
-      </div>
-    </div>
-  </div>
-
-  <!-- Navigation Buttons -->
-  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-4 px-4 max-w-2xl mx-auto">
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-4 px-4 max-w-2xl mx-auto" aria-label="頁面導航">
     <div class="grid grid-cols-3 gap-3">
-      <!-- 回主頁 -->
       <div>
-        <button onclick="navigate(0)"
-          class="nav-btn w-full bg-white border-2 border-amber-800 text-amber-800 font-medium py-3 rounded-2xl flex items-center justify-center gap-2">
-          <i class="fas fa-home"></i>
-          <span id="btnHomeText">回主頁</span>
-        </button>
-        <input id="linkHome" type="text" placeholder="主頁連結"
-          class="mt-2 w-full text-xs px-3 py-1 border border-gray-300 rounded-xl text-center">
+        <button onclick="navigate(0)" class="nav-btn w-full bg-white border-2 border-purple-700 text-purple-700 font-medium py-3 rounded-2xl flex items-center justify-center gap-2"><i class="fas fa-home"></i><span>回主頁</span></button>
+        <input id="linkHome" type="url" placeholder="主頁連結" class="mt-2 w-full text-xs px-3 py-1.5 border border-gray-300 rounded-xl text-center">
       </div>
-
-      <!-- 上一頁 -->
       <div>
-        <button onclick="navigate(1)"
-          class="nav-btn w-full bg-white border-2 border-amber-800 text-amber-800 font-medium py-3 rounded-2xl flex items-center justify-center gap-2">
-          <i class="fas fa-chevron-left"></i>
-          <span id="btnPrevText">上一頁</span>
-        </button>
-        <input id="linkPrev" type="text" placeholder="上一頁連結"
-          class="mt-2 w-full text-xs px-3 py-1 border border-gray-300 rounded-xl text-center">
+        <button onclick="navigate(1)" class="nav-btn w-full bg-white border-2 border-purple-700 text-purple-700 font-medium py-3 rounded-2xl flex items-center justify-center gap-2"><i class="fas fa-chevron-left"></i><span>上一頁</span></button>
+        <input id="linkPrev" type="url" placeholder="上一頁連結" class="mt-2 w-full text-xs px-3 py-1.5 border border-gray-300 rounded-xl text-center">
       </div>
-
-      <!-- 下一頁 -->
       <div>
-        <button onclick="navigate(2)"
-          class="nav-btn w-full bg-white border-2 border-amber-800 text-amber-800 font-medium py-3 rounded-2xl flex items-center justify-center gap-2">
-          <span id="btnNextText">下一頁</span>
-          <i class="fas fa-chevron-right"></i>
-        </button>
-        <input id="linkNext" type="text" placeholder="下一頁連結"
-          class="mt-2 w-full text-xs px-3 py-1 border border-gray-300 rounded-xl text-center">
+        <button onclick="navigate(2)" class="nav-btn w-full bg-white border-2 border-purple-700 text-purple-700 font-medium py-3 rounded-2xl flex items-center justify-center gap-2"><span>下一頁</span><i class="fas fa-chevron-right"></i></button>
+        <input id="linkNext" type="url" placeholder="下一頁連結" class="mt-2 w-full text-xs px-3 py-1.5 border border-gray-300 rounded-xl text-center">
       </div>
     </div>
-  </div>
+  </nav>
 
   <script>
-    function generateInvestmentPrompt() {
-      const asset = document.getElementById('assetInput').value.trim();
-      if (!asset) return alert('請輸入資產代號！');
-
-      const prompt = `請以專業投資分析師的角度，對資產「${asset}」進行完整的九合一分析報告。\n\n包含以下九個維度：\n1. 基本面分析\n2. 技術面分析\n3. 估值分析\n4. 風險評估\n5. 宏觀環境影響\n6. 競爭優勢與護城河\n7. 未來成長潛力\n8. 投資建議（包含目標價區間）\n9. 最新市場情緒與新聞摘要`;
-
-      document.getElementById('visualInput').value = prompt;
-    }
-
-    function copyInvestmentPrompt() {
-      const prompt = document.getElementById('visualInput').value;
-      if (!prompt) return alert('請先生成投資分析 Prompt！');
-      copyText(prompt, '投資分析 Prompt 已複製到剪貼簿！');
-    }
-
-    function generateVisualPrompt() {
-      const input = document.getElementById('visualInput').value.trim();
-      if (!input) return alert('請輸入描述文字！');
-
-      const visualPrompt = `${input}, cinematic lighting, ultra detailed, photorealistic, 8k, masterpiece, best quality, intricate details, sharp focus, volumetric light, cinematic composition, rule of thirds`;
-      document.getElementById('visualOutput').value = visualPrompt;
-    }
-
-    function copyVisualPrompt() {
-      const output = document.getElementById('visualOutput').value;
-      if (output) copyText(output, '✅ Prompt 已複製到剪貼簿！');
-      else alert('請先生成視覺 Prompt！');
-    }
-
-    function copyText(text, message) {
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(() => alert(message));
+    function generatePrompt() {
+      const input = document.getElementById('inputText').value.trim();
+      if (!input) {
+        alert('請輸入描述內容！');
         return;
       }
-      const helper = document.createElement('textarea');
-      helper.value = text;
-      helper.style.position = 'fixed';
-      helper.style.opacity = '0';
-      document.body.appendChild(helper);
-      helper.select();
-      document.execCommand('copy');
-      helper.remove();
-      alert(message);
+
+      const prompt = `${input}, cinematic lighting, volumetric light, ultra detailed, 8k, masterpiece, best quality, intricate details, sharp focus, photorealistic, rule of thirds, professional composition`;
+      document.getElementById('outputPrompt').value = prompt;
+    }
+
+    async function copyPrompt() {
+      const output = document.getElementById('outputPrompt');
+      if (!output.value) {
+        alert('請先生成 Prompt');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(output.value);
+      } catch {
+        output.select();
+        document.execCommand('copy');
+      }
+      alert('✅ Prompt 已複製到剪貼簿！');
     }
 
     function navigate(type) {
-      let link = '';
-      if (type === 0) link = document.getElementById('linkHome').value.trim();
-      if (type === 1) link = document.getElementById('linkPrev').value.trim();
-      if (type === 2) link = document.getElementById('linkNext').value.trim();
-
-      if (link) window.open(link, '_blank', 'noopener,noreferrer');
-      else alert('請先在下方輸入對應的連結！');
+      const ids = ['linkHome', 'linkPrev', 'linkNext'];
+      const link = document.getElementById(ids[type]).value.trim();
+      if (link) {
+        window.open(link, '_blank', 'noopener,noreferrer');
+      } else {
+        alert('請先填寫對應的連結！');
+      }
     }
 
     function goHome() {
