@@ -27,49 +27,41 @@
     let cardCount = 0;
 
     function escapeHtml(value) {
-      return String(value)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
+      return String(value).replace(/[&<>'"]/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[character]));
     }
 
-    function createCard(title = "新功能", url = "") {
+    function createCard(title = '新功能', url = '') {
       cardCount++;
       const id = cardCount;
       const container = document.getElementById('cardsContainer');
-      const safeTitle = escapeHtml(title);
-      const safeUrl = escapeHtml(url);
-
       const cardHTML = `
         <div class="hub-card bg-white rounded-2xl overflow-hidden shadow">
-          <div class="bg-blue-600 text-white p-4 text-center font-medium text-lg" contenteditable="true" id="title-${id}">
-            ${safeTitle}
-          </div>
+          <div class="bg-blue-600 text-white p-4 text-center font-medium text-lg" contenteditable="true" id="title-${id}">${escapeHtml(title)}</div>
           <div class="p-5 space-y-4">
             <div>
-              <input type="text" id="name-${id}" value="${safeTitle}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500" placeholder="顯示名稱">
+              <input type="text" id="name-${id}" value="${escapeHtml(title)}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500" placeholder="顯示名稱">
             </div>
             <div>
-              <input type="text" id="url-${id}" value="${safeUrl}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500" placeholder="https://example.com">
+              <input type="text" id="url-${id}" value="${escapeHtml(url)}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500" placeholder="https://example.com">
             </div>
             <div class="flex gap-3">
               <button onclick="saveCard(${id})" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-medium">儲存設定</button>
               <button onclick="openLink(${id})" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium">前往</button>
             </div>
           </div>
-        </div>
-      `;
-
+        </div>`;
       container.insertAdjacentHTML('beforeend', cardHTML);
     }
 
     function saveCard(id) {
-      const nameInput = document.getElementById(`name-${id}`);
-      const titleEl = document.getElementById(`title-${id}`);
-      const name = nameInput.value.trim();
-      titleEl.textContent = name || "未命名";
+      const name = document.getElementById(`name-${id}`).value.trim();
+      document.getElementById(`title-${id}`).textContent = name || '未命名';
       alert('✅ 設定已儲存！');
     }
 
@@ -83,20 +75,20 @@
     }
 
     function addNewCard() {
-      createCard(`新功能 ${cardCount + 1}`, "");
+      createCard(`新功能 ${cardCount + 1}`, '');
     }
 
-    window.onload = function() {
-      createCard("Google Vids", "https://vids.google.com");
-      createCard("Temp Mail", "https://temp-mail.org");
-      createCard("Design Tools", "https://webstack.cc");
-      createCard("Gem 視覺工程師", "#");
-      createCard("投資分析器", "#");
-      createCard("YouTube", "https://youtube.com");
-      createCard("GitHub", "https://github.com");
-      createCard("Notion", "https://notion.so");
-      createCard("ChatGPT", "https://chatgpt.com");
-    };
+    window.addEventListener('DOMContentLoaded', () => {
+      createCard('Google Vids', 'https://vids.google.com');
+      createCard('Temp Mail', 'https://temp-mail.org');
+      createCard('Design Tools', 'https://webstack.cc');
+      createCard('Gem 視覺工程師', 'index.html');
+      createCard('投資分析器', '#');
+      createCard('YouTube', 'https://youtube.com');
+      createCard('GitHub', 'https://github.com');
+      createCard('Notion', 'https://notion.so');
+      createCard('ChatGPT', 'https://chatgpt.com');
+    });
   </script>
 </body>
 </html>
